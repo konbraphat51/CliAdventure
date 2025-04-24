@@ -1,10 +1,10 @@
 <script>
-import CliBox from "/src/components/CliBox.vue"
+import GameScreen from "./components/GameScreen/GameScreen.vue"
 </script>
 
 <template>
 	<div>
-		<CliBox />
+		<GameScreen />
 	</div>
 </template>
 
