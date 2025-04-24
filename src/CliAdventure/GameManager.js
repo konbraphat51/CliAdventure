@@ -8,4 +8,21 @@ export default class GameManager {
 		const parsedInput = Parse(userInput)
 		Command(parsedInput)
 	}
+
+	Output() {
+		return [
+			{
+				line: "test test test test",
+				type: "normal",
+			},
+			{
+				line: "error error error",
+				type: "error",
+			},
+			{
+				line: "emphasis emphasis emphasis",
+				type: "emphasis",
+			},
+		]
+	}
 }
