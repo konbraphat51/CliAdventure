@@ -1,9 +1,9 @@
-import { Parse } from "./Parser"
-import { Command } from "./CommandRouter"
+import {Parse} from "./Parser"
+import {Command} from "./GameModel/CommandRouter"
 
 interface OutputLine {
-	line: string;
-	type: "normal" | "error" | "emphasis";
+	line: string
+	type: "normal" | "error" | "emphasis"
 }
 
 export default class GameManager {
