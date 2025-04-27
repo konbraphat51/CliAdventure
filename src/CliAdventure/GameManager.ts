@@ -1,15 +1,20 @@
 import { Parse } from "./Parser"
 import { Command } from "./CommandRouter"
 
+interface OutputLine {
+	line: string;
+	type: "normal" | "error" | "emphasis";
+}
+
 export default class GameManager {
 	constructor() {}
 
-	GetInput(userInput) {
+	GetInput(userInput: string): void {
 		const parsedInput = Parse(userInput)
 		Command(parsedInput)
 	}
 
-	Output() {
+	Output(): OutputLine[] {
 		return [
 			{
 				line: "test test test test",

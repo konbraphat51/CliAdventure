@@ -1,5 +1,11 @@
-export function Parse(input) {
-	const result = {
+interface ParseResult {
+	verb: string;
+	params: string[];
+	flags: { flag: string; params: string[] }[];
+}
+
+export function Parse(input: string): ParseResult {
+	const result: ParseResult = {
 		verb: "",
 		params: [],
 		flags: [],
@@ -9,9 +15,9 @@ export function Parse(input) {
 	if (parts.length === 0) return result
 
 	// Extract the verb
-	result.verb = parts.shift()
+	result.verb = parts.shift() || ""
 
-	let currentFlag = null
+	let currentFlag: { flag: string; params: string[] } | null = null
 
 	for (const part of parts) {
 		if (part.startsWith("--")) {
