@@ -113,5 +113,11 @@ export namespace GameFileSystem {
 		public removeChild(child: FileSystemEntry): void {
 			this._children = this._children.filter((c) => c !== child)
 		}
+
+		public getFullPath(): string {
+			return `${this.parent ? this.parent.getFullPath() + "/" : ""}${
+				this.name
+			}/`
+		}
 	}
 }
