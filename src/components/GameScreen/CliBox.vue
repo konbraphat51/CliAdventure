@@ -35,11 +35,12 @@ export default {
 				{{ line.line }}
 			</div>
 		</div>
-		<textarea
+		<input
 			v-model="userInput"
 			@keyup.enter="handleInput"
 			placeholder="Type a command..."
-		></textarea>
+			class="input-box"
+		/>
 	</div>
 </template>
 
@@ -47,54 +48,33 @@ export default {
 .CliBox {
 	display: flex;
 	flex-direction: column;
-	height: 100%;
+	height: 94vh; /* Expand to full screen height */
+	width: 94vw; /* Expand to full screen width */
 }
 
 .output {
 	flex: 1;
-	overflow-y: auto;
+	overflow-y: auto; /* Enable vertical scrolling */
+	overflow-x: hidden; /* Disable horizontal scrolling */
 	background: black;
 	color: white;
 	padding: 10px;
 	font-family: monospace;
+	width: 100%;
 }
 
-textarea {
-	resize: none;
+.input-box {
+	width: 100%;
 	border: none;
 	padding: 10px;
 	font-family: monospace;
-	background: black; /* Match the .output background color */
-	color: white; /* Match the .output text color */
-	caret-color: white; /* Ensure caret is visible */
+	background: rgb(84, 84, 84);
+	color: white;
+	caret-color: white;
 }
 
-textarea:focus {
+.input-box:focus {
 	outline: none;
-}
-
-textarea:not(:focus) {
-	position: relative;
-}
-
-textarea:not(:focus)::after {
-	content: "";
-	position: absolute;
-	right: 10px; /* Adjust based on padding */
-	width: 2px;
-	height: 1em;
-	background-color: white;
-	animation: blink 1s steps(2, start) infinite;
-}
-
-@keyframes blink {
-	0%,
-	100% {
-		border-color: transparent;
-	}
-	50% {
-		border-color: white;
-	}
 }
 
 .normal {
