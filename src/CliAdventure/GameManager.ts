@@ -1,5 +1,5 @@
-import {Parse} from "./Parser"
-import {Command} from "./GameModel/CommandRouter"
+import { Parse } from "./Parser"
+import { Command } from "./GameModel/CommandRouter"
 
 interface OutputLine {
 	line: string
@@ -9,7 +9,7 @@ interface OutputLine {
 export default class GameManager {
 	constructor() {}
 
-	GetInput(userInput: string): void {
+	Input(userInput: string): void {
 		const parsedInput = Parse(userInput)
 		Command(parsedInput)
 	}
