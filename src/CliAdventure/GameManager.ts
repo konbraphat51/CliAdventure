@@ -9,12 +9,10 @@ interface OutputLine {
 export default class GameManager {
 	constructor() {}
 
-	Input(userInput: string): void {
-		const parsedInput = Parse(userInput)
-		Command(parsedInput)
-	}
+	Interact(userInput: string): OutputLine[] {
+		// const parsedInput = Parse(userInput)
+		// Command(parsedInput)
 
-	Output(): OutputLine[] {
 		return [
 			{
 				line: "test test test test",

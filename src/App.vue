@@ -1,5 +1,12 @@
 <script>
 import GameScreen from "./components/GameScreen/GameScreen.vue"
+
+export default {
+	name: "App",
+	components: {
+		GameScreen,
+	},
+}
 </script>
 
 <template>

@@ -6,6 +6,9 @@ export default {
 	props: {
 		content: String,
 	},
+	components: {
+		CliBox,
+	},
 }
 </script>
 
