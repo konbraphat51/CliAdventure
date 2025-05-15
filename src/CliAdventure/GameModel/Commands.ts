@@ -11,6 +11,8 @@ export function Command(parsedInput: ParseResult, os: OsModel): OutputLine[] {
 			return new CommandHelp().Operate(parsedInput, os)
 		case "read":
 			return new CommandRead().Operate(parsedInput, os)
+		case "ls":
+			return new CommandLs().Operate(parsedInput, os)
 		default:
 			return [
 				{
@@ -303,6 +305,81 @@ export class CommandRead implements CommandUnit {
 			},
 			{
 				line: "read /path/to/file.txt",
+				type: "emphasis",
+			},
+		]
+	}
+}
+
+export class CommandLs implements CommandUnit {
+	public Operate(parsedInput: ParseResult, os: OsModel): OutputLine[] {
+		// if there is "--help" flag
+		if (parsedInput.flags.some((flag) => flag.flag === "help")) {
+			return this.Help()
+		} else if (parsedInput.params.length > 0) {
+			return [
+				{
+					line: "Error: Too many arguments.",
+					type: "error",
+				},
+				{
+					line: "Use 'ls --help' for more information.",
+					type: "normal",
+				},
+			]
+		} else if (parsedInput.flags.length > 0) {
+			return [
+				{
+					line: "Error: Invalid flags.",
+					type: "error",
+				},
+				{
+					line: "Use 'ls --help' for more information.",
+					type: "normal",
+				},
+			]
+		} else {
+			const currentDirectory = os.currentDirectory
+			const files = currentDirectory.children
+			return files.map((file) => ({
+				line: file.name,
+				type: "normal",
+			}))
+		}
+	}
+
+	private Help(): OutputLine[] {
+		return [
+			{
+				line: "ls",
+				type: "emphasis",
+			},
+			{
+				line: "List the contents of the current directory.",
+				type: "normal",
+			},
+			{
+				line: "",
+				type: "normal",
+			},
+			{
+				line: "ls --help",
+				type: "emphasis",
+			},
+			{
+				line: "Display this help message.",
+				type: "normal",
+			},
+			{
+				line: "",
+				type: "normal",
+			},
+			{
+				line: "Examples:",
+				type: "normal",
+			},
+			{
+				line: "ls",
 				type: "emphasis",
 			},
 		]
