@@ -19,4 +19,17 @@ export class OsModel {
 		this._rootFile = new GameFileSystem.Directory("", null)
 		this._currentDirectory = this._rootFile
 	}
+
+	public MoveDirectory(newDirectory: GameFileSystem.Directory): boolean {
+		if (this.IsDirectoryReadable(newDirectory)) {
+			this._currentDirectory = newDirectory
+			return true
+		} else {
+			return false
+		}
+	}
+
+	public IsDirectoryReadable(directory: GameFileSystem.Directory): boolean {
+		return directory.permissionRead.includes(this.currentPermission)
+	}
 }

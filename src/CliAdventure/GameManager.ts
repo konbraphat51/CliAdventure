@@ -1,10 +1,6 @@
 import { Parse } from "./Parser"
-import { Command } from "./GameModel/CommandRouter"
-
-interface OutputLine {
-	line: string
-	type: "normal" | "error" | "emphasis"
-}
+import { Command } from "./GameModel/Commands"
+import { OutputLine } from "./GameModel/OutputLine"
 
 export default class GameManager {
 	constructor() {}

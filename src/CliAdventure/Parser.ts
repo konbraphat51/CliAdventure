@@ -1,7 +1,7 @@
-interface ParseResult {
-	verb: string;
-	params: string[];
-	flags: { flag: string; params: string[] }[];
+export interface ParseResult {
+	verb: string
+	params: string[]
+	flags: { flag: string; params: string[] }[]
 }
 
 export function Parse(input: string): ParseResult {
