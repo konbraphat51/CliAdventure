@@ -1,0 +1,18 @@
+{
+	"permissions": {
+		"read": [
+			"root-admin",
+			"0334-admin",
+			"03340226-admin",
+			"03340226-security",
+			"IneTung"
+		],
+		"write": [
+			"root-admin",
+			"0334-admin",
+			"03340226-admin",
+			"03340226-security",
+			"IneTung"
+		]
+	}
+}
