@@ -3,7 +3,25 @@ import { OutputLine } from "./OutputLine"
 import { ParseResult } from "../Parser"
 import { GameFileSystem } from "./FileSystem"
 
-export function Command(parsedInput: ParseResult, os: OsModel): void {}
+export function Command(parsedInput: ParseResult, os: OsModel): OutputLine[] {
+	switch (parsedInput.verb) {
+		case "cd":
+			return new CommandCd().Operate(parsedInput, os)
+		case "help":
+			return new CommandHelp().Operate(parsedInput, os)
+		default:
+			return [
+				{
+					line: `Error: Command '${parsedInput.verb}' not found.`,
+					type: "error",
+				},
+				{
+					line: "Use 'help' for a list of available commands.",
+					type: "normal",
+				},
+			]
+	}
+}
 
 export abstract class CommandUnit {
 	public abstract Operate: (
@@ -136,6 +154,41 @@ export class CommandCd implements CommandUnit {
 			{
 				line: "cd ../",
 				type: "emphasis",
+			},
+		]
+	}
+}
+
+export class CommandHelp implements CommandUnit {
+	public Operate(parsedInput: ParseResult, os: OsModel): OutputLine[] {
+		return [
+			{
+				line: "Available commands:",
+				type: "normal",
+			},
+			{
+				line: "cd [directory]",
+				type: "emphasis",
+			},
+			{
+				line: "Change the current directory to the specified directory.",
+				type: "normal",
+			},
+			{
+				line: "",
+				type: "normal",
+			},
+			{
+				line: "help",
+				type: "emphasis",
+			},
+			{
+				line: "Display this help message.",
+				type: "normal",
+			},
+			{
+				line: "",
+				type: "normal",
 			},
 		]
 	}
