@@ -336,5 +336,14 @@
       }
     }
   ],
-  "meta": null
+  "meta": {
+    "permissions": {
+      "read": [
+        "root-admin"
+      ],
+      "write": [
+        "root-admin"
+      ]
+    }
+  }
 }

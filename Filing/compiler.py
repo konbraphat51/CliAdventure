@@ -32,13 +32,18 @@ def load_directory(path):
     }
 
 def main():
-    # Instead of expecting directory.json in root, treat its subdirs as children
+    # Load meta for root from root/directory.json
+    meta_path = os.path.join(ROOT_DIR, 'directory.json')
+    with open(meta_path, 'r', encoding='utf-8') as f:
+        root_meta = json.load(f)
     children = []
     for entry in os.listdir(ROOT_DIR):
         full_path = os.path.join(ROOT_DIR, entry)
+        if entry == 'directory.json':
+            continue
         if os.path.isdir(full_path):
             children.append(load_directory(full_path))
-        elif entry != 'directory.json':
+        else:
             with open(full_path, 'r', encoding='utf-8', errors='replace') as f:
                 content = f.read()
             children.append({
@@ -50,7 +55,7 @@ def main():
         'type': 'directory',
         'name': 'root',
         'children': children,
-        'meta': None
+        'meta': root_meta
     }
     with open(OUTPUT_FILE, 'w', encoding='utf-8') as f:
         json.dump(filing, f, ensure_ascii=False, indent=2)
