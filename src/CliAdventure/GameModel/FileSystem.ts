@@ -27,7 +27,7 @@ export namespace GameFileSystem {
 		constructor(
 			name: string,
 			parent: Directory | null,
-			entryType: FileSystemEntryType,
+			entryType: FileSystemEntryType
 		) {
 			this._name = name
 			this._parent = parent
@@ -102,6 +102,9 @@ export namespace GameFileSystem {
 		}
 		private _children: FileSystemEntry[] = []
 
+		public permissionRead: string[] = []
+		public permissionWrite: string[] = []
+
 		constructor(name: string, parent: Directory | null) {
 			super(name, parent, FileSystemEntryType.Directory)
 		}
@@ -118,6 +121,54 @@ export namespace GameFileSystem {
 			return `${this.parent ? this.parent.getFullPath() + "/" : ""}${
 				this.name
 			}/`
+		}
+	}
+
+	// Utility to load the file system from JSON
+	export function loadFileSystemFromJson(
+		json: any,
+		parent: Directory | null = null
+	): Directory {
+		function createEntry(
+			entry: any,
+			parent: Directory | null
+		): FileSystemEntry {
+			if (entry.type === "directory") {
+				const dir = new Directory(entry.name, parent)
+				if (entry.meta && entry.meta.permissions) {
+					dir.permissionRead = entry.meta.permissions.read || []
+					dir.permissionWrite = entry.meta.permissions.write || []
+				}
+				if (Array.isArray(entry.children)) {
+					for (const child of entry.children) {
+						dir.addChild(createEntry(child, dir))
+					}
+				}
+				return dir
+			} else if (entry.type === "file") {
+				if (entry.name.endsWith(".exe")) {
+					const file = new FileExecutable(entry.name, parent!)
+					return file
+				} else {
+					const file = new FileContent(entry.name, parent!)
+					if (typeof entry.content === "string") file.setContent(entry.content)
+					return file
+				}
+			}
+			throw new Error("Unknown entry type: " + entry.type)
+		}
+		return createEntry(json, parent) as Directory
+	}
+
+	// FileSystemRoot class to load and hold the root directory from filing.json
+	export class FileSystemRoot {
+		public root: Directory
+
+		constructor() {
+			// Dynamically import the JSON file (works with Vite and Webpack)
+			// @ts-ignore
+			const filingJson = require("@/assets/filing.json")
+			this.root = loadFileSystemFromJson(filingJson, null)
 		}
 	}
 }
