@@ -1,0 +1,6 @@
+{
+	"permissions": {
+		"read": ["root-admin"],
+		"write": ["root-admin"]
+	}
+}

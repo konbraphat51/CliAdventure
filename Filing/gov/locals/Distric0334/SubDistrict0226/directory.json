@@ -1,0 +1,6 @@
+{
+	"permissions": {
+		"read": ["root-admin", "0334-admin", "03340226-admin", "03340226-security"],
+		"write": ["root-admin", "0334-admin", "03340226-admin", "03340226-security"]
+	}
+}
