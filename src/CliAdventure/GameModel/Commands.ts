@@ -9,6 +9,8 @@ export function Command(parsedInput: ParseResult, os: OsModel): OutputLine[] {
 			return new CommandCd().Operate(parsedInput, os)
 		case "help":
 			return new CommandHelp().Operate(parsedInput, os)
+		case "read":
+			return new CommandRead().Operate(parsedInput, os)
 		default:
 			return [
 				{
@@ -189,6 +191,119 @@ export class CommandHelp implements CommandUnit {
 			{
 				line: "",
 				type: "normal",
+			},
+		]
+	}
+}
+
+export class CommandRead implements CommandUnit {
+	public Operate(parsedInput: ParseResult, os: OsModel): OutputLine[] {
+		// if there is "--help" flag
+		if (parsedInput.flags.some((flag) => flag.flag === "help")) {
+			return this.Help()
+		} else if (parsedInput.params.length === 0) {
+			return [
+				{
+					line: "Error: No file specified.",
+					type: "error",
+				},
+				{
+					line: "Use 'read --help' for more information.",
+					type: "normal",
+				},
+			]
+		} else if (parsedInput.params.length > 1) {
+			return [
+				{
+					line: "Error: Too many arguments.",
+					type: "error",
+				},
+				{
+					line: "Use 'read --help' for more information.",
+					type: "normal",
+				},
+			]
+		} else if (parsedInput.flags.length > 0) {
+			return [
+				{
+					line: "Error: Invalid flags.",
+					type: "error",
+				},
+				{
+					line: "Use 'read --help' for more information.",
+					type: "normal",
+				},
+			]
+		} else {
+			const filePath = parsedInput.params[0]
+			const currentDirectory = os.currentDirectory
+			const file = GameFileSystem.GetFileByPath(filePath, currentDirectory)
+			if (file === null) {
+				return [
+					{
+						line: `Error: File '${filePath}' not found.`,
+						type: "error",
+					},
+					{
+						line: "Use 'read --help' for more information.",
+						type: "normal",
+					},
+				]
+			} else if (!(file instanceof GameFileSystem.FileContent)) {
+				return [
+					{
+						line: `Error: '${filePath}' is not a file.`,
+						type: "error",
+					},
+					{
+						line: "Use 'read --help' for more information.",
+						type: "normal",
+					},
+				]
+			} else {
+				return [
+					{
+						line: file.content,
+						type: "normal",
+					},
+				]
+			}
+		}
+	}
+
+	private Help(): OutputLine[] {
+		return [
+			{
+				line: "read [file]",
+				type: "emphasis",
+			},
+			{
+				line: "Read the contents of the specified file.",
+				type: "normal",
+			},
+			{
+				line: "",
+				type: "normal",
+			},
+			{
+				line: "read --help",
+				type: "emphasis",
+			},
+			{
+				line: "Display this help message.",
+				type: "normal",
+			},
+			{
+				line: "",
+				type: "normal",
+			},
+			{
+				line: "Examples:",
+				type: "normal",
+			},
+			{
+				line: "read /path/to/file.txt",
+				type: "emphasis",
 			},
 		]
 	}
