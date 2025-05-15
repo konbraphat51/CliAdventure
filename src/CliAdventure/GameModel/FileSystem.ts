@@ -19,6 +19,13 @@ export namespace GameFileSystem {
 		get entryType(): FileSystemEntryType {
 			return this._entryType
 		}
+		get root(): Directory {
+			let current: Directory | null = this.parent
+			while (current && current.parent) {
+				current = current.parent
+			}
+			return current!
+		}
 
 		protected _name: string
 		protected _parent: Directory | null
@@ -170,5 +177,73 @@ export namespace GameFileSystem {
 			const filingJson = require("@/assets/filing.json")
 			this.root = loadFileSystemFromJson(filingJson, null)
 		}
+	}
+
+	export function GetFileByPath(
+		pathStr: string,
+		currentDir: Directory
+	): FileSystemEntry | null {
+		if (pathStr.includes("./")) {
+			// Relative path
+			return _GetFileByRelPath(pathStr, currentDir)
+		} else {
+			// Absolute path
+			return _GetFileByAbsPath(pathStr, currentDir)
+		}
+	}
+
+	function _GetFileByAbsPath(
+		pathStr: string,
+		currentDir: Directory
+	): FileSystemEntry | null {
+		const path = pathStr.split("/").filter((p) => p.length > 0)
+		const rootDirectory = currentDir.root
+		let currentEntry: FileSystemEntry | null = rootDirectory
+		for (const part of path) {
+			if (currentEntry instanceof Directory) {
+				const found: FileSystemEntry | undefined = currentEntry.children.find(
+					(child) => child.name === part
+				)
+				if (found) {
+					currentEntry = found
+				} else {
+					return null
+				}
+			} else {
+				return null
+			}
+		}
+		return currentEntry
+	}
+
+	function _GetFileByRelPath(
+		pathStr: string,
+		currentDir: Directory
+	): FileSystemEntry | null {
+		const path = pathStr.split("/").filter((p) => p.length > 0)
+		let currentEntry: FileSystemEntry | null = currentDir
+		for (const part of path) {
+			if (part === ".") {
+				// do nothing
+			} else if (part === "..") {
+				if (currentEntry.parent) {
+					currentEntry = currentEntry.parent
+				}
+			} else {
+				if (currentEntry instanceof Directory) {
+					const found: FileSystemEntry | undefined = currentEntry.children.find(
+						(child) => child.name === part
+					)
+					if (found) {
+						currentEntry = found
+					} else {
+						return null
+					}
+				} else {
+					return null
+				}
+			}
+		}
+		return currentEntry
 	}
 }
